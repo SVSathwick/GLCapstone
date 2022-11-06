@@ -6,7 +6,7 @@ import datetime
 import sched
 
 # Define ENDPOINT, TOPIC, RELATOVE DIRECTORY for CERTIFICATE AND KEYS
-ENDPOINT = "account_endpoint_for_things.amazonaws.com"
+ENDPOINT = "ayis9dea5ktp8-ats.iot.us-east-1.amazonaws.com"
 PATH_TO_CERT = "..\\config"
 TOPIC = "iot/agritech"
 
@@ -59,9 +59,13 @@ class AWS():
 # Also there can be different method calls as well based on the devices and their working.
 if __name__ == '__main__':
     # SOil sensor device Objects
-    soil_sensor_1 = AWS("soil_sensor_1", "thing_1_certificate_filename", "thing_1_private_key_filename")
-    soil_sensor_2 = AWS("soil_sensor_2", "thing_2_certificate_filename", "thing_2_private_key_filename")
-    soil_sensor_3 = AWS("soil_sensor_3", "thing_3_certificate_filename", "thing_3_private_key_filename")
+    soil_sensor_1 = AWS("soil_sensor_1", "DeviceCertificate-certificate.pem.crt", "BSM_G101-private.pem.key")
+    soil_sensor_2 = AWS("soil_sensor_2", "DeviceCertificate-certificate.pem.crt", "BSM_G101-private.pem.key")
+    soil_sensor_3 = AWS("soil_sensor_3", "DeviceCertificate-certificate.pem.crt", "BSM_G101-private.pem.key")
+    soil_sensor_4 = AWS("soil_sensor_4", "DeviceCertificate-certificate.pem.crt", "BSM_G101-private.pem.key")
+    soil_sensor_5 = AWS("soil_sensor_5", "DeviceCertificate-certificate.pem.crt", "BSM_G101-private.pem.key")
 
-    for sensor in (soil_sensor_1, soil_sensor_2, soil_sensor_3):
+    soil_sensors = [soil_sensor_1, soil_sensor_2, soil_sensor_3, soil_sensor_4, soil_sensor_5]
+
+    for sensor in soil_sensors:
         sensor.publish()
