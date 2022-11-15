@@ -10,17 +10,18 @@ ENDPOINT = "ayis9dea5ktp8-ats.iot.us-east-1.amazonaws.com"
 PATH_TO_CERT = "..\\config"
 TOPIC = "iot/agritech"
 
+SPRIKLER_LOCATION_LIST = list()
+SENSOR_LIST = list()
+
 # AWS class to create number of objects (devices)
 class AWS():
     # Constructor that accepts client id that works as device id and file names for different devices
     # This method will obviosuly be called while creating the instance
     # It will create the MQTT client for AWS using the credentials
     # Connect operation will make sure that connection is established between the device and AWS MQTT
-    def __init__(self, client, lon, lat, sprinkler, certificate, private_key):
+    def __init__(self, client, certificate, private_key, sprinkler):
         self.client_id = client
-        self.device_id = client       
-        self.lat = lat
-        self.lon = lon
+        self.device_id = client
         self.sprinkler = sprinkler
         self.cert_path = PATH_TO_CERT + "\\" + certificate
         self.pvt_key_path = PATH_TO_CERT + "\\" + private_key
@@ -45,8 +46,6 @@ class AWS():
             timestamp = str(datetime.datetime.now())
             message['deviceid'] = self.device_id
             message['timestamp'] = timestamp
-            message['lat'] = self.lat
-            message['lon'] = self.lon            
             message['sprinkler'] = self.sprinkler
             message['datatype'] = 'Temperature'
             message['value'] = value
@@ -76,8 +75,9 @@ if __name__ == '__main__':
     # for sensor in soil_sensors:
     #     sensor.publish()
 
+    # 123
     #Reading the configuration file
-    f = open('sprinkler_config.json', 'r')
+    f = open('sprinkler_config_2.json', 'r')
     config = json.loads(f.read())
     f.close()
 
@@ -85,21 +85,34 @@ if __name__ == '__main__':
 
     sprinklers = config['sprinklers']
     for sprinkler in sprinklers:
-        # print(f'Sprinkler: ', sprinkler['name'])
-        
-        sensors_sp = sprinkler['soil_sensors']
-        for sensor in sensors_sp:
-            # print('')
-            # print('\tdevice_id: ', sensor['device_id'])
-            # print('\tlat: ', sensor['lat'])
-            # print('\tlon: ', sensor['lon'])
-            # print('')
-            sensor['sprinkler'] = sprinkler['name']
-            sensors.append(sensor)
+        # print(f'type: {type(sprinkler)}')
         # print(sprinkler)
 
-    # print(config)
+        lat = sprinkler['lat']
+        lon = sprinkler['lon']
+        sprinklr_loc_map = { 'sprinkler':sprinkler['name'], 'lat':lat, 'lon':lon}
+        SPRIKLER_LOCATION_LIST.append(sprinklr_loc_map)
+        
+        #sprinkler_name = sprinkler['name']
+        #print(f'sprinkler: {sprinkler_name}, lon: {lon}, lat: {lat}')
 
-    for sensor in sensors:
-        print(f"Device id: {sensor['device_id']}, Lattitude: {sensor['lat']}, Longitude: {sensor['lon']}, Sprinkler: {sensor['sprinkler']}")
-        print(f"Certificate: {sensor['certificate']}, Private Key: {sensor['private_key']}\n")
+        cert = sprinkler['certificate']
+        private_key = sprinkler['private_key']
+        sensors = sprinkler['soil_sensors']
+        for dev_id in sensors:
+            #print(f'device id: {dev_id}')
+            #print(f'Certificate: {cert}')
+            #print(f'priate key: {private_key}')
+            sensor = AWS(client=dev_id, certificate=cert, private_key=private_key, sprinkler=sprinkler['name'])
+            SENSOR_LIST.append(sensor)
+            #sensor.publish()
+
+    #print('SPRIKLER_LOCATION_LIST')
+    for item in SPRIKLER_LOCATION_LIST:
+        print(item)
+    
+    print('')
+
+    #print('SENSOR_LIST')
+    for sensor in SENSOR_LIST:
+        sensor.publish()
