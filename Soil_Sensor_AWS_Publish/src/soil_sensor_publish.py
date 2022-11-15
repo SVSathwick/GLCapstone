@@ -37,7 +37,7 @@ class AWS():
 
     # This method will publish the data on MQTT 
     # Before publishing we are confiuguring message to be published on MQTT
-    def publish(self):
+    def publish_soil_data(self):
         print('Begin Publish')
         for i in range (10):
             message = {}    
@@ -63,19 +63,7 @@ class AWS():
 # Again this is a minimal example that can be extended to incopporate more devices
 # Also there can be different method calls as well based on the devices and their working.
 if __name__ == '__main__':
-    # SOil sensor device Objects
-    # soil_sensor_1 = AWS("soil_sensor_1", "DeviceCertificate-certificate.pem.crt", "BSM_G101-private.pem.key")
-    # soil_sensor_2 = AWS("soil_sensor_2", "DeviceCertificate-certificate.pem.crt", "BSM_G101-private.pem.key")
-    # soil_sensor_3 = AWS("soil_sensor_3", "DeviceCertificate-certificate.pem.crt", "BSM_G101-private.pem.key")
-    # soil_sensor_4 = AWS("soil_sensor_4", "DeviceCertificate-certificate.pem.crt", "BSM_G101-private.pem.key")
-    # soil_sensor_5 = AWS("soil_sensor_5", "DeviceCertificate-certificate.pem.crt", "BSM_G101-private.pem.key")
-
-    # soil_sensors = [soil_sensor_1, soil_sensor_2, soil_sensor_3, soil_sensor_4, soil_sensor_5]
-
-    # for sensor in soil_sensors:
-    #     sensor.publish()
-
-    # 123
+    
     #Reading the configuration file
     f = open('sprinkler_config_2.json', 'r')
     config = json.loads(f.read())
@@ -90,6 +78,8 @@ if __name__ == '__main__':
 
         lat = sprinkler['lat']
         lon = sprinkler['lon']
+
+        # Map Sprinkler with location coordinates
         sprinklr_loc_map = { 'sprinkler':sprinkler['name'], 'lat':lat, 'lon':lon}
         SPRIKLER_LOCATION_LIST.append(sprinklr_loc_map)
         
@@ -99,13 +89,15 @@ if __name__ == '__main__':
         cert = sprinkler['certificate']
         private_key = sprinkler['private_key']
         sensors = sprinkler['soil_sensors']
+
         for dev_id in sensors:
             #print(f'device id: {dev_id}')
             #print(f'Certificate: {cert}')
             #print(f'priate key: {private_key}')
+
+            # Create SOil sensor device Objects and add them to SENSOR_LIST
             sensor = AWS(client=dev_id, certificate=cert, private_key=private_key, sprinkler=sprinkler['name'])
             SENSOR_LIST.append(sensor)
-            #sensor.publish()
 
     #print('SPRIKLER_LOCATION_LIST')
     for item in SPRIKLER_LOCATION_LIST:
@@ -114,5 +106,6 @@ if __name__ == '__main__':
     print('')
 
     #print('SENSOR_LIST')
+    #publish soil data for each sensor
     for sensor in SENSOR_LIST:
-        sensor.publish()
+        sensor.publish_soil_data()
