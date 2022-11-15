@@ -4,11 +4,23 @@ import AWSIoTPythonSDK.MQTTLib as AWSIoTPyMQTT
 import random
 import datetime
 import sched
+from pyowm import OWM
+from pyowm.utils import config
+from pyowm.utils import timestamps
+
+
+CERTIFICATE = "AgriTech-certificate.pem.crt"
+PRIVATE_KEY = "AgriTech-private.pem.key"
 
 # Define ENDPOINT, TOPIC, RELATOVE DIRECTORY for CERTIFICATE AND KEYS
 ENDPOINT = "ayis9dea5ktp8-ats.iot.us-east-1.amazonaws.com"
 PATH_TO_CERT = "..\\config"
-TOPIC = "iot/agritech"
+TOPIC_SOIL = "iot/soil"
+
+#Weather API details
+owm = OWM('0f8b321c68552dff33eeb5625f971c39')
+mgr = owm.weather_manager()
+TOPIC_AIR = "iot/air"
 
 SPRIKLER_LOCATION_LIST = list()
 SENSOR_LIST = list()
@@ -19,10 +31,9 @@ class AWS():
     # This method will obviosuly be called while creating the instance
     # It will create the MQTT client for AWS using the credentials
     # Connect operation will make sure that connection is established between the device and AWS MQTT
-    def __init__(self, client, certificate, private_key, sprinkler):
+    def __init__(self, client, certificate, private_key):
         self.client_id = client
         self.device_id = client
-        self.sprinkler = sprinkler
         self.cert_path = PATH_TO_CERT + "\\" + certificate
         self.pvt_key_path = PATH_TO_CERT + "\\" + private_key
         self.root_path = PATH_TO_CERT + "\\" + "AmazonRootCA1.pem"
@@ -38,6 +49,11 @@ class AWS():
     # This method will publish the data on MQTT 
     # Before publishing we are confiuguring message to be published on MQTT
     def publish_soil_data(self):
+        sprinkler = ''
+        for i in range(0, len(SENSOR_LIST)):
+            if self.device_id is SENSOR_LIST[i]['soil_sensor']:
+                sprinkler = SENSOR_LIST[i]['sprinkler']
+
         print('Begin Publish')
         for i in range (10):
             message = {}    
@@ -46,14 +62,32 @@ class AWS():
             timestamp = str(datetime.datetime.now())
             message['deviceid'] = self.device_id
             message['timestamp'] = timestamp
-            message['sprinkler'] = self.sprinkler
+            message['sprinkler'] = sprinkler
             message['datatype'] = 'Temperature'
             message['value'] = value
             messageJson = json.dumps(message)
-            self.myAWSIoTMQTTClient.publish(TOPIC, messageJson, 1) 
-            print("Published: '" + json.dumps(message) + "' to the topic: " + TOPIC)
+            self.myAWSIoTMQTTClient.publish(TOPIC_SOIL, messageJson, 1) 
+            print("Published: '" + json.dumps(message) + "' to the topic: " + TOPIC_SOIL)
             time.sleep(0.1)
         print('Publish End')
+
+    def publish_air_data(self):
+        for i in range(0, len(SPRIKLER_LOCATION_LIST)):
+
+            sprinkler = SPRIKLER_LOCATION_LIST[i]['sprinkler']
+            lat = SPRIKLER_LOCATION_LIST[i]['lat']
+            lon = SPRIKLER_LOCATION_LIST[i]['lon']
+            # sprinker_num = "sprinkler_"+str(i+1)
+            observation = mgr.one_call(lat, lon)
+            w = observation.current
+            timestamp = str(datetime.datetime.now())
+            air_message = {'timestamp': str(timestamp), 'lat': str(lat), 'lon': str(lon), 'temperature': str(w.temperature('celsius')['temp']), 'humidity': str(w.humidity), 'sprinkler': sprinkler}
+            #message['sprinkler'] = sprinker_number
+            messageJson = json.dumps(air_message)
+            self.myAWSIoTMQTTClient.publish(TOPIC_AIR, messageJson, 1)
+            print("Published: '" + json.dumps(air_message) + "' to the topic: " + TOPIC_AIR)
+            time.sleep(0.2)
+
 
     # Disconect operation for each devices
     def disconnect(self):
@@ -63,14 +97,13 @@ class AWS():
 # Again this is a minimal example that can be extended to incopporate more devices
 # Also there can be different method calls as well based on the devices and their working.
 if __name__ == '__main__':
-    
+
     #Reading the configuration file
     f = open('sprinkler_config_2.json', 'r')
     config = json.loads(f.read())
     f.close()
 
-    sensors = []
-
+    # Read the config file and build the SoilSensor-Sprinkler map and Lon-Lat-Sprinkler map
     sprinklers = config['sprinklers']
     for sprinkler in sprinklers:
         # print(f'type: {type(sprinkler)}')
@@ -96,8 +129,9 @@ if __name__ == '__main__':
             #print(f'priate key: {private_key}')
 
             # Create SOil sensor device Objects and add them to SENSOR_LIST
-            sensor = AWS(client=dev_id, certificate=cert, private_key=private_key, sprinkler=sprinkler['name'])
-            SENSOR_LIST.append(sensor)
+            sprinklr_soil_sensor_map = {"soil_sensor": dev_id, 'sprinkler':sprinkler['name']}
+            SENSOR_LIST.append(sprinklr_soil_sensor_map)
+
 
     #print('SPRIKLER_LOCATION_LIST')
     for item in SPRIKLER_LOCATION_LIST:
@@ -107,5 +141,40 @@ if __name__ == '__main__':
 
     #print('SENSOR_LIST')
     #publish soil data for each sensor
-    for sensor in SENSOR_LIST:
-        sensor.publish_soil_data()
+    # for sensor in SENSOR_LIST:
+    #     sensor.publish_soil_data()
+
+    # Main method with actual objects and method calling to publish the data in MQTT
+    # Again this is a minimal example that can be extended to incopporate more devices
+    # Also there can be different method calls as well based on the devices and their working.
+    t0 = time.time()
+    print('Publish Begin')
+    
+    while True:
+        try:
+            t1 = time.time()
+            diff = t1-t0
+
+            publish_air = False
+            if diff >= 300 or diff <= 1:
+                publish_air = True
+
+            if publish_air:
+                t0 = t1
+
+                # publish air data for lat and lon of all Sprinklers
+                for item in SPRIKLER_LOCATION_LIST:
+                    # print(item)
+                    air_sensor = AWS("air_sensor", CERTIFICATE, PRIVATE_KEY)
+                    air_sensor.publish_air_data()
+
+            else:
+                for sprinklr_soil_sensor_map in SENSOR_LIST:
+                    sensor_dev_id = sprinklr_soil_sensor_map['soil_sensor']
+                    soil_sensor_1 = AWS(sensor_dev_id, CERTIFICATE, PRIVATE_KEY)
+                    soil_sensor_1.publish_soil_data()
+
+
+        except KeyboardInterrupt:
+            print('Publish End')
+            break
