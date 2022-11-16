@@ -2,173 +2,43 @@
     "sprinklers": [
         {
             "name": "sprinkler_1",
-            "soil_sensors":
-            [
-                {
-                    "device_id":"ss_1",
-                    "lat": 25.276987, 
-                    "lon": 55.296249,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                },
-                {
-                    "device_id":"ss_2",
-                    "lat": 25.276987,
-                    "lon": 55.284249,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                },
-                {
-                    "device_id":"ss_3",
-                    "lat": 25.276987,
-                    "lon": 55.273249,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                },
-                {
-                    "device_id":"ss_4",
-                    "lat": 25.276987,
-                    "lon": 55.262249,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                }
-            ]
+            "lat": 25.276987, 
+            "lon": 55.296249,
+            "certificate":"AgriTech-certificate.pem.crt",
+            "private_key":"AgriTech-private.pem.key",
+            "soil_sensors": ["ss_11", "ss_12", "ss_13", "ss_14"]
         },
         {
             "name": "sprinkler_2",
-            "soil_sensors":
-            [
-                {
-                    "device_id":"ss_5",
-                    "lat": 28.5355, 
-                    "lon": 77.3910,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                },
-                {
-                    "device_id":"ss_6",
-                    "lat": 28.5355, 
-                    "lon": 77.3910,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                },
-                {
-                    "device_id":"ss_7",
-                    "lat": 28.5355, 
-                    "lon": 77.3910,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                },
-                {
-                    "device_id":"ss_8",
-                    "lat": 28.5355, 
-                    "lon": 77.3910,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                }
-            ]
+            "lat": 25.276987, 
+            "lon": 55.296249,
+            "certificate":"AgriTech-certificate.pem.crt",
+            "private_key":"AgriTech-private.pem.key",
+            "soil_sensors": ["ss_21", "ss_22", "ss_23", "ss_24"]
         },
         {
             "name": "sprinkler_3",
-            "soil_sensors":
-            [
-                {
-                    "device_id":"ss_9",
-                    "lat": 28.5355, 
-                    "lon": 77.3910,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                },
-                {
-                    "device_id":"ss_10",
-                    "lat": 28.5355, 
-                    "lon": 77.3910,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                },
-                {
-                    "device_id":"ss_11",
-                    "lat": 28.5355, 
-                    "lon": 77.3910,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                },
-                {
-                    "device_id":"ss_12",
-                    "lat": 28.5355, 
-                    "lon": 77.3910,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                }
-            ]
+            "lat": 25.276987, 
+            "lon": 55.296249,
+            "certificate":"AgriTech-certificate.pem.crt",
+            "private_key":"AgriTech-private.pem.key",
+            "soil_sensors": ["ss_31", "ss_32", "ss_33", "ss_34"]
         },
         {
             "name": "sprinkler_4",
-            "soil_sensors":
-            [
-                {
-                    "device_id":"ss_13",
-                    "lat": 28.5355, 
-                    "lon": 77.3910,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                },
-                {
-                    "device_id":"ss_14",
-                    "lat": 28.5355, 
-                    "lon": 77.3910,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                },
-                {
-                    "device_id":"ss_15",
-                    "lat": 28.5355, 
-                    "lon": 77.3910,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                },
-                {
-                    "device_id":"ss_16",
-                    "lat": 28.5355, 
-                    "lon": 77.3910,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                }
-            ]
+            "lat": 25.276987, 
+            "lon": 55.296249,
+            "certificate":"AgriTech-certificate.pem.crt",
+            "private_key":"AgriTech-private.pem.key",
+            "soil_sensors": ["ss_41", "ss_42", "ss_43", "ss_44"]
         },
         {
             "name": "sprinkler_5",
-            "soil_sensors":
-            [
-                {
-                    "device_id":"ss_17",
-                    "lat": 28.5355, 
-                    "lon": 77.3910,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                },
-                {
-                    "device_id":"ss_18",
-                    "lat": 28.5355, 
-                    "lon": 77.3910,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                },
-                {
-                    "device_id":"ss_19",
-                    "lat": 28.5355, 
-                    "lon": 77.3910,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                },
-                {
-                    "device_id":"ss_20",
-                    "lat": 28.5355, 
-                    "lon": 77.3910,
-                    "certificate":"DeviceCertificate-certificate.pem.crt",
-                    "private_key":"AgriTech-private.pem.key"
-                }
-            ]
+            "lat": 25.276987, 
+            "lon": 55.296249,
+            "certificate":"AgriTech-certificate.pem.crt",
+            "private_key":"AgriTech-private.pem.key",
+            "soil_sensors": ["ss_51", "ss_52", "ss_53", "ss_54"]
         }
     ]
 }

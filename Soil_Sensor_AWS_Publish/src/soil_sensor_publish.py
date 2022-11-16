@@ -99,7 +99,7 @@ class AWS():
 if __name__ == '__main__':
 
     #Reading the configuration file
-    f = open('sprinkler_config_2.json', 'r')
+    f = open('sprinkler_config.json', 'r')
     config = json.loads(f.read())
     f.close()
 
