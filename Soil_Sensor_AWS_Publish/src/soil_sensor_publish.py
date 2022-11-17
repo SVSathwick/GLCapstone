@@ -13,7 +13,7 @@ CERTIFICATE = "AgriTech-certificate.pem.crt"
 PRIVATE_KEY = "AgriTech-private.pem.key"
 
 # Define ENDPOINT, TOPIC, RELATOVE DIRECTORY for CERTIFICATE AND KEYS
-ENDPOINT = "ayis9dea5ktp8-ats.iot.us-east-1.amazonaws.com"
+ENDPOINT = "a2tqpjl3eibavf-ats.iot.us-east-1.amazonaws.com"
 PATH_TO_CERT = "..\\config"
 TOPIC_SOIL = "iot/soil"
 
